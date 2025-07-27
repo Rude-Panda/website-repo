@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
+// import Image from "next/image";
 import { motion } from "framer-motion";
 import { Separator } from "./ui/separator";
 
@@ -27,33 +27,61 @@ const features = [
     title: "Multiple Models, One Interface",
     description: "Switch between top-tier AI models seamlessly in a unified studio.",
     media: (
-      <Image
-        src="/GenerationTypes/type-image.png"
-        alt="Image Feature"
-        width={800}
-        height={600}
+      <video
+        src="/Modes/video-enhance.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
         style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 0 }}
-        unoptimized
-        onError={() => console.error("Failed to load type-image.png")}
       />
     ),
   },
+  // {
+  //   title: "Multiple Models, One Interface",
+  //   description: "Switch between top-tier AI models seamlessly in a unified studio.",
+  //   media: (
+  //     <Image
+  //       src="/GenerationTypes/type-image.png"
+  //       alt="Image Feature"
+  //       width={800}
+  //       height={600}
+  //       style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 0 }}
+  //       unoptimized
+  //       onError={() => console.error("Failed to load type-image.png")}
+  //     />
+  //   ),
+  // },
   // 3. 3D Generation Support
   {
     title: "3D Generation Support",
     description: "Bring imagination to life with 3D generation.",
     media: (
-      <Image
-        src="/GenerationTypes/type-3d.png"
-        alt="3D Feature"
-        width={800}
-        height={600}
-        style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 0, opacity: 0.7 }}
-        unoptimized
-        onError={() => console.error("Failed to load type-3d.png")}
+      <video
+        src="/Modes/video-enhance.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 0 }}
       />
     ),
   },
+  // {
+  //   title: "3D Generation Support",
+  //   description: "Bring imagination to life with 3D generation.",
+  //   media: (
+  //     <Image
+  //       src="/GenerationTypes/type-3d.png"
+  //       alt="3D Feature"
+  //       width={800}
+  //       height={600}
+  //       style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 0, opacity: 0.7 }}
+  //       unoptimized
+  //       onError={() => console.error("Failed to load type-3d.png")}
+  //     />
+  //   ),
+  // },
   // 4. Projects
   {
     title: "Stay Organized. Stay Creative.",
@@ -184,11 +212,11 @@ export default function FeaturesSection() {
     <section
       id="features"
       // className="w-[100vw] bg-background border-t"
-      className="max-w-[60vw] mx-auto bg-background"
+      className="mx-auto bg-background"
     >
       <div className="w-full">
-        <div className="flex justify-start items-center p-4 border-x border-t">
-          <h1 className="text-3xl font-bold font-mono">Features</h1>
+        <div className="sticky top-0 flex justify-center items-center p-4  bg-background">
+          <h1 className="text-3xl font-bold font-mono">Game changing features</h1>
         </div>
         <div className="flex w-full border">
           {/* --- Left Column: Feature List --- */}

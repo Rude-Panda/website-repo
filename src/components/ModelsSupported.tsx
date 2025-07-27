@@ -43,34 +43,33 @@ export default function ModelsSupported() {
     };
     const handleMouseLeave = () => setMouse(null);
 
-    // Grid layout constants (should match CSS grid)
-    const cols = 10; // lg:grid-cols-10
-    const cellWidth = 128; // lg:w-32 (32*4=128px)
-    const cellHeight = 128; // lg:h-32
-    const gapX = 36; // md:gap-x-9 (9*4=36px)
-    const gapY = 36; // md:gap-y-9
+    // Responsive grid constants
+    const gap = 24; // px, equal gap for x and y
+    const minCell = 80; // px, minimum cell size
+    const maxCell = 128; // px, maximum cell size
 
     return (
         <section className="w-full max-w-[60vw] mx-auto">
             <h2 className="text-3xl font-bold font-mono mb-16">Supported Models and Providers</h2>
             <div
                 ref={gridRef}
-                className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-10 gap-x-3 gap-y-3 md:gap-x-9 md:gap-y-9 justify-items-center items-center relative"
-                style={{ userSelect: "none", width: '100%' }}
+                className="grid justify-items-center items-center relative"
+                style={{
+                    gridTemplateColumns: `repeat(auto-fit, minmax(${minCell}px, 1fr))`,
+                    gap: `${gap}px`,
+                    userSelect: "none",
+                }}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
             >
-                {logos.map((logo, i) => (
+                {logos.map((logo) => (
                     <LogoTorchCell
                         key={logo}
                         logo={logo}
                         mouse={mouse}
-                        index={i}
-                        cols={cols}
-                        cellWidth={cellWidth}
-                        cellHeight={cellHeight}
-                        gapX={gapX}
-                        gapY={gapY}
+                        gridRef={gridRef as React.RefObject<HTMLDivElement>}
+                        minCell={minCell}
+                        maxCell={maxCell}
                     />
                 ))}
             </div>
@@ -79,28 +78,41 @@ export default function ModelsSupported() {
     );
 }
 
-function LogoTorchCell({ logo, mouse, index, cols, cellWidth, cellHeight, gapX, gapY }: {
+function LogoTorchCell({ logo, mouse, gridRef, minCell, maxCell }: {
     logo: string;
     mouse?: { x: number; y: number } | null;
-    index?: number;
-    cols?: number;
-    cellWidth?: number;
-    cellHeight?: number;
-    gapX?: number;
-    gapY?: number;
+    gridRef: React.RefObject<HTMLDivElement>;
+    minCell?: number;
+    maxCell?: number;
 }) {
-    // Compute cell position in grid
-    const col = index !== undefined && cols ? index % cols : 0;
-    const row = index !== undefined && cols ? Math.floor(index / cols) : 0;
-    const x0 = col * ((cellWidth ?? 128) + (gapX ?? 36));
-    const y0 = row * ((cellHeight ?? 128) + (gapY ?? 36));
-    const w = cellWidth ?? 128;
-    const h = cellHeight ?? 128;
+    // Responsive cell size
+    const [cellSize, setCellSize] = React.useState(maxCell ?? 128);
+    const cellRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        if (!cellRef.current) return;
+        // Get actual cell size from DOM
+        const resize = () => {
+            if (cellRef.current) {
+                const rect = cellRef.current.getBoundingClientRect();
+                setCellSize(rect.width);
+            }
+        };
+        resize();
+        window.addEventListener('resize', resize);
+        return () => window.removeEventListener('resize', resize);
+    }, []);
 
     // Torch logic
     let torch: { x: number; y: number } | null = null;
-    const torchRadius = 100;
-    if (mouse) {
+    const torchRadius = Math.max(cellSize * 0.8, 80); // Responsive torch radius
+    if (mouse && cellRef.current && gridRef?.current) {
+        const gridRect = gridRef.current.getBoundingClientRect();
+        const cellRect = cellRef.current.getBoundingClientRect();
+        const x0 = cellRect.left - gridRect.left;
+        const y0 = cellRect.top - gridRect.top;
+        const w = cellRect.width;
+        const h = cellRect.height;
         // Find the closest point on the cell's bounding box to the mouse
         const closestX = Math.max(x0, Math.min(mouse.x, x0 + w));
         const closestY = Math.max(y0, Math.min(mouse.y, y0 + h));
@@ -118,8 +130,15 @@ function LogoTorchCell({ logo, mouse, index, cols, cellWidth, cellHeight, gapX, 
 
     return (
         <div
-            className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 flex items-center justify-center"
-            style={{ pointerEvents: 'none' }}
+            ref={cellRef}
+            className="relative flex items-center justify-center aspect-square"
+            style={{
+                width: `clamp(${minCell ?? 80}px, 100%, ${maxCell ?? 128}px)`,
+                minWidth: `${minCell ?? 80}px`,
+                maxWidth: `${maxCell ?? 128}px`,
+                height: `auto`,
+                pointerEvents: 'none',
+            }}
         >
             {/* Black & white logo */}
             <Image
@@ -136,8 +155,8 @@ function LogoTorchCell({ logo, mouse, index, cols, cellWidth, cellHeight, gapX, 
                     className="absolute inset-0 pointer-events-none"
                     style={{
                         zIndex: 2,
-                        WebkitMaskImage: `radial-gradient(circle 100px at ${torch.x}px ${torch.y}px, white 99%, transparent 100%)`,
-                        maskImage: `radial-gradient(circle 100px at ${torch.x}px ${torch.y}px, white 99%, transparent 100%)`,
+                        WebkitMaskImage: `radial-gradient(circle ${torchRadius}px at ${torch.x}px ${torch.y}px, white 99%, transparent 100%)`,
+                        maskImage: `radial-gradient(circle ${torchRadius}px at ${torch.x}px ${torch.y}px, white 99%, transparent 100%)`,
                     }}
                     initial={false}
                     animate={{}}
