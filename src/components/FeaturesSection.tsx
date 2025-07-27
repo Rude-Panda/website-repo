@@ -33,6 +33,8 @@ const features = [
         width={800}
         height={600}
         style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 0 }}
+        unoptimized
+        onError={() => console.error("Failed to load type-image.png")}
       />
     ),
   },
@@ -47,6 +49,8 @@ const features = [
         width={800}
         height={600}
         style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 0, opacity: 0.7 }}
+        unoptimized
+        onError={() => console.error("Failed to load type-3d.png")}
       />
     ),
   },
@@ -187,63 +191,63 @@ export default function FeaturesSection() {
           <h1 className="text-3xl font-bold font-mono">Features</h1>
         </div>
         <div className="flex w-full border">
-        {/* --- Left Column: Feature List --- */}
-        <div className="w-1/2 border-r">
-          <div className="">
-            {features.map((feature, idx) => (
-              <div
-                key={feature.description}
-                data-index={idx}
-                className="w-full flex items-center"
-              // className="w-full min-h-[60vh] flex items-center"
-              >
-                <motion.div
-                  // className="flex flex-col justify-center text-left transition-all duration-300 ease-in-out w-full h-screen"
-                  className={`flex flex-col justify-center text-left w-full p-8 h-[50vh]  ${idx === current ? "bg-accent/20 border-l border-cyan-500" : ""}`}
-                  initial={{ opacity: 0.6 }}
-                  animate={{ opacity: idx === current ? 1 : 0.6 }}
-                  transition={{ duration: 0.2, ease: "easeInOut" }}
+          {/* --- Left Column: Feature List --- */}
+          <div className="w-1/2 border-r">
+            <div className="">
+              {features.map((feature, idx) => (
+                <div
+                  key={feature.description}
+                  data-index={idx}
+                  className="w-full flex items-center"
+                // className="w-full min-h-[60vh] flex items-center"
                 >
-                  <h3 className="text-2xl font-bold mb-8 font-mono">
-                    {feature.title}
-                  </h3>
-                  <p className="text-xl text-muted-foreground mb-6 font-mono">
-                    {feature.description}
-                  </p>
-                </motion.div>
-              </div>
-            ))}
+                  <motion.div
+                    // className="flex flex-col justify-center text-left transition-all duration-300 ease-in-out w-full h-screen"
+                    className={`flex flex-col justify-center text-left w-full p-8 h-[50vh]  ${idx === current ? "bg-accent/20 border-l border-cyan-500" : ""}`}
+                    initial={{ opacity: 0.6 }}
+                    animate={{ opacity: idx === current ? 1 : 0.6 }}
+                    transition={{ duration: 0.2, ease: "easeInOut" }}
+                  >
+                    <h3 className="text-2xl font-bold mb-8 font-mono">
+                      {feature.title}
+                    </h3>
+                    <p className="text-xl text-muted-foreground mb-6 font-mono">
+                      {feature.description}
+                    </p>
+                  </motion.div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* --- Right Column: Feature Media --- */}
-        <div
-          className="w-1/2 flex items-center justify-center px-4 sticky top-0"
-          style={{
-            height: "100vh",
-          }}
-        >
-          <motion.div
-            className="relative w-full h-[calc(100vh-2rem)]"
-            initial={{ opacity: 1, scale: 1 }}
-            animate={{ opacity: isTransitioning ? 0 : 1, scale: isTransitioning ? 0.95 : 1 }}
-            transition={{ duration: 0.15, ease: "easeInOut" }}
+          {/* --- Right Column: Feature Media --- */}
+          <div
+            className="w-1/2 flex items-center justify-center px-4 sticky top-0"
+            style={{
+              height: "100vh",
+            }}
           >
-            {/* Render all media elements but only show the current one */}
-            {features.map((feature, idx) => (
-              <motion.div
-                key={`${feature.description}-${idx}`}
-                className="absolute inset-0 w-full h-full"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: idx === current ? 1 : 0, scale: idx === current ? 1 : 0.95 }}
-                transition={{ duration: 0.15, ease: "easeInOut" }}
-                style={{ pointerEvents: idx === current ? "auto" : "none" }}
-              >
-                {feature.media}
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
+            <motion.div
+              className="relative w-full h-[calc(100vh-2rem)]"
+              initial={{ opacity: 1, scale: 1 }}
+              animate={{ opacity: isTransitioning ? 0 : 1, scale: isTransitioning ? 0.95 : 1 }}
+              transition={{ duration: 0.15, ease: "easeInOut" }}
+            >
+              {/* Render all media elements but only show the current one */}
+              {features.map((feature, idx) => (
+                <motion.div
+                  key={`${feature.description}-${idx}`}
+                  className="absolute inset-0 w-full h-full"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: idx === current ? 1 : 0, scale: idx === current ? 1 : 0.95 }}
+                  transition={{ duration: 0.15, ease: "easeInOut" }}
+                  style={{ pointerEvents: idx === current ? "auto" : "none" }}
+                >
+                  {feature.media}
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
         </div>
         <Separator className="my-16" />
       </div>

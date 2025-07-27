@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 export function HeroSection() {
   const sectionRef = React.useRef<HTMLDivElement>(null);
   const [mouse, setMouse] = React.useState<{ x: number; y: number } | null>(null);
+  const [imageError, setImageError] = React.useState(false);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = sectionRef.current?.getBoundingClientRect();
@@ -17,6 +18,11 @@ export function HeroSection() {
     });
   };
   const handleMouseLeave = () => setMouse(null);
+
+  const handleImageError = () => {
+    setImageError(true);
+    console.error("Failed to load hero image");
+  };
 
   // Torch effect constants
   const torchRadius = 200;
@@ -43,9 +49,11 @@ export function HeroSection() {
           className="object-cover grayscale contrast-800 brightness-60"
           draggable={false}
           priority
+          onError={handleImageError}
+          unoptimized
         />
         {/* Torch color effect */}
-        {mouse && (
+        {mouse && !imageError && (
           <motion.div
             className="absolute inset-0 pointer-events-none"
             style={{
@@ -64,6 +72,7 @@ export function HeroSection() {
               className="object-cover"
               draggable={false}
               priority
+              unoptimized
               style={{ zIndex: 2 }}
             />
           </motion.div>

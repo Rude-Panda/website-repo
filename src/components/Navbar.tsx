@@ -94,7 +94,7 @@ export function Navbar() {
                 {/* CTA button on the right */}
                 <div className="flex items-center gap-4">
                     <Button
-                        className="p-8 text-lg font-semibold bg-cyan-500 hover:bg-cyan-600 hover:cursor-pointer text-primary rounded-none font-mono"
+                        className="px-3 py-2 text-lg font-semibold bg-cyan-500 hover:bg-cyan-600 hover:cursor-pointer text-primary rounded-none font-mono"
                         asChild
                     >
                         <a className="text-white" href="/login">Try it now</a>
