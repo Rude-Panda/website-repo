@@ -52,7 +52,8 @@ export function Navbar() {
             }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-            <nav className="w-full flex items-center justify-between px-4 bg-background/40 backdrop-blur-4xl border max-w-[60vw] mx-auto">
+            {/* <nav className="w-full flex items-center justify-between px-4 bg-background/40 backdrop-blur-4xl border max-w-[60vw] mx-auto"> */}
+            <nav className="flex items-center justify-between px-4 bg-background/40 backdrop-blur-4xl border mx-4">
                 {/* Logo on the left */}
                 <div className="flex items-center gap-2">
                     <Link href="/" className="flex items-center gap-2">
@@ -94,10 +95,10 @@ export function Navbar() {
                 {/* CTA button on the right */}
                 <div className="flex items-center gap-4">
                     <Button
-                        className="px-3 py-2 text-lg font-semibold bg-cyan-500 hover:bg-cyan-600 hover:cursor-pointer text-primary rounded-none font-mono"
+                        className="px-3 py-2 text-lg font-semibold bg-primary hover:bg-primary/20 hover:cursor-pointer text-background hover:text-primary rounded-none font-mono"
                         asChild
                     >
-                        <a className="text-white" href="/login">Try it now</a>
+                        <a href="/login">Try it now</a>
                     </Button>
                 </div>
             </nav>
